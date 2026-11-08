@@ -15,3 +15,19 @@ Topics Covered:
   - String search & membership operators (keyword in title.lower())
 ================================================================================
 """
+def get_valid-id(prompt_msg,tasks):
+    """prompt user for a valid task ID that exist in the task dictionary."""
+    while True:
+        raw = input(prompt_msg).strip()
+        if raw == "":
+            print("Error: Invalid input. ID must be an integer(e.g. 1, 2, 3).")
+            continue
+        try:
+            task_id = int(raw)
+        except ValueError:
+            print("Error: Invalid input. ID must be an integer (e.g. 1, 2, 3.)")
+            continue
+        if task_id not in tasks:
+            print(f"Error: Task ID {task_id} does not exist in the list. Please try again!.")
+            continue
+        return task_id 
