@@ -15,7 +15,7 @@ Topics Covered:
   - String search & membership operators (keyword in title.lower())
 ================================================================================
 """
-def get_valid-id(prompt_msg,tasks):
+def get_valid_id(prompt_msg,tasks):
     """prompt user for a valid task ID that exist in the task dictionary."""
     while True:
         raw = input(prompt_msg).strip()
