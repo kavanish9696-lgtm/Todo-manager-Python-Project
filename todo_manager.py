@@ -49,3 +49,15 @@ def get_valid_category(categories):
         category_list = sorted(list(categories))
         print("Known Categories: " + ", ".join(category_list))
         raw = input("Enter category (or type a new one): ").strip()
+
+        if raw == "":
+            print("Error: Category cannot be empty. Please try again.")
+            continue
+        if "|" in raw:
+            print("Error: Category name cannot contain '|'. Please try again.")
+            continue
+
+        formatted_cat = raw.title()
+        categories.add(formatted_cat)
+        return formatted_cat
+        
