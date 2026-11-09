@@ -41,3 +41,11 @@ def get_valid_priority():
         if priority != "":
             return priority
         print("Error: Invalid priority. Please Choose High, Medium, Low.")
+
+
+def get_valid_category(categories):
+    """Prompt user to choose an existing category or enter a new one."""
+    while True:
+        category_list = sorted(list(categories))
+        print("Known Categories: " + ", ".join(category_list))
+        raw = input("Enter category (or type a new one): ").strip()
