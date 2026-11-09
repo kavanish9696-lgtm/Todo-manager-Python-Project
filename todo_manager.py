@@ -31,3 +31,8 @@ def get_valid_id(prompt_msg,tasks):
             print(f"Error: Task ID {task_id} does not exist in the list. Please try again!.")
             continue
         return task_id 
+
+def get_valid_priority():
+    "prompt user until a valid priority (High, Medium, or Low) is entered. "
+    while True:
+        
