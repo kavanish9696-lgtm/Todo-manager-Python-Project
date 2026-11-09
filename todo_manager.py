@@ -35,4 +35,9 @@ def get_valid_id(prompt_msg,tasks):
 def get_valid_priority():
     "prompt user until a valid priority (High, Medium, or Low) is entered. "
     while True:
-        
+        print("Available Priorities: " + ", ".join(PRIORITIES))
+        raw = input("Enter priority (High/Medium/Low): ")
+        priority = is_valid_priority(raw)
+        if priority != "":
+            return priority
+        print("Error: Invalid priority. Please Choose High, Medium, Low.")
