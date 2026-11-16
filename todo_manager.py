@@ -259,5 +259,28 @@ def clear_completed_tasks(tasks):
     print(f"Success: Cleared {len(completed_ids)} completed task(s)!")
     return True
 
+def search_tasks(tasks):
+    """Search tasks by title keyword."""
+    print("\n--- Search Tasks by Keyword ---")
+    if len(tasks) == 0:
+        print("Notice: Task list is empty.")
+        return 0
 
+    keyword = input("Enter search keyword (e.g. 'hw', 'lab', 'gym'): ").strip().lower()
+    if keyword == "":
+        print("Notice: Search keyword was empty.")
+        return 0
+
+    matching_tasks = {}
+    for tid in tasks:
+        title = tasks[tid][1]
+        if keyword in title.lower():
+            matching_tasks[tid] = tasks[tid]
+
+    if len(matching_tasks) == 0:
+        print(f"No tasks found matching keyword '{keyword}'.")
+        return 0
+
+    print(f"\nFound {len(matching_tasks)} matching task(s):")
+    return show_tasks(matching_tasks, None)
 
