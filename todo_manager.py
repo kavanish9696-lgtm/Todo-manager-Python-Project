@@ -315,4 +315,32 @@ def show_tasks(tasks, filter_status=None):
                 display_list.remove(task)
     else:
         display_list = all_tasks[:]
+    
+     if len(display_list) == 0:
+        print(f"\nNotice: No tasks found matching status '{filter_status}'.")
+        return 0
+
+    # Step 4: Print table header with formatted column widths including Due Date
+    print("\n" + "=" * 78)
+    print(f"{'ID':<5} {'Title':<25} {'Priority':<9} {'Status':<9} {'Category':<12} {'Due Date':<11}")
+    print("=" * 78)
+
+    count = 0
+    # NESTED LOOPS:
+    # Outer loop iterates through priorities (High, Medium, Low)
+    # Inner loop iterates through tasks to group them under each priority
+    for p in PRIORITIES:
+        for task in display_list:
+            if task[2] == p:
+                tid, title, priority, status, category, due_date = task
+                print(f"{tid:<5} {title:<25} {priority:<9} {status:<9} {category:<12} {due_date:<11}")
+                count = count + 1
+
+    print("=" * 78)
+    print(f"Total tasks shown: {count}")
+    return count
+
+
+if __name__ == "__main__":
+    print("Avanish Kumar's Operations Module (Part 3) is ready.")
 
