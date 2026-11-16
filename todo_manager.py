@@ -127,3 +127,97 @@ def mark_done(tasks):
     print(f"Success: Task #{task_id} ('{task[1]}') marked as Done!")
     return True
 
+
+def mark_done(tasks):
+    """Mark an existing pending task as 'Done'."""
+    print("\n--- Mark Task as Done ---")
+    if len(tasks) == 0:
+        print("Notice: No tasks available.")
+        return False
+
+    task_id = get_valid_id("Enter Task ID to mark as done: ", tasks)
+    task = tasks[task_id]
+
+    if task[3] == STATUS_DONE:
+        print(f"Notice: Task #{task_id} is already marked as Done.")
+        return False
+
+    # Tuples are immutable, so we create a new tuple keeping due date intact
+    updated_task = (task[0], task[1], task[2], STATUS_DONE, task[4], task[5])
+    tasks[task_id] = updated_task
+
+    print(f"Success: Task #{task_id} ('{task[1]}') marked as Done!")
+    return True
+
+
+def edit_task(tasks, categories):
+    """Edit title, priority, category, or due date of an existing task."""
+    print("\n--- Edit Task ---")
+    if len(tasks) == 0:
+        print("Notice: No tasks available to edit.")
+        return False
+
+    task_id = get_valid_id("Enter Task ID to edit: ", tasks)
+    task = tasks[task_id]
+    print(f"Current task: Title='{task[1]}', Priority='{task[2]}', Status='{task[3]}', Category='{task[4]}', Due Date='{task[5]}'")
+
+    # Edit title
+    while True:
+        prompt = f"Enter new title (press Enter to keep '{task[1]}'): "
+        raw_title = input(prompt)
+        if raw_title.strip() == "":
+            new_title = task[1]
+            break
+        cleaned = clean_title(raw_title)
+        if cleaned == "":
+            print("Error: Invalid title or contains '|'. Please try again.")
+            continue
+        new_title = cleaned
+        break
+
+    # Edit priority
+    while True:
+        prompt = f"Enter new priority (press Enter to keep '{task[2]}'): "
+        raw_priority = input(prompt).strip()
+        if raw_priority == "":
+            new_priority = task[2]
+            break
+        validated_p = is_valid_priority(raw_priority)
+        if validated_p != "":
+            new_priority = validated_p
+            break
+        print("Error: Priority must be High, Medium, or Low.")
+
+    # Edit category
+    while True:
+        prompt = f"Enter new category (press Enter to keep '{task[4]}'): "
+        raw_cat = input(prompt).strip()
+        if raw_cat == "":
+            new_category = task[4]
+            break
+        if "|" in raw_cat:
+            print("Error: Category cannot contain '|'. Please try again.")
+            continue
+        new_category = raw_cat.title()
+        categories.add(new_category)
+        break
+
+    # Edit due date
+    while True:
+        prompt = f"Enter new due date (YYYY-MM-DD) (press Enter to keep '{task[5]}'): "
+        raw_date = input(prompt).strip()
+        if raw_date == "":
+            new_date = task[5]
+            break
+        if is_valid_date(raw_date):
+            new_date = raw_date
+            break
+        print("Error: Invalid date! Please use YYYY-MM-DD format.")
+
+    updated_task = (task[0], new_title, new_priority, task[3], new_category, new_date)
+    tasks[task_id] = updated_task
+
+    print(f"Success: Task #{task_id} updated successfully!")
+    return True
+
+
