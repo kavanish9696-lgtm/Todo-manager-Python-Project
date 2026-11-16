@@ -340,7 +340,3 @@ def show_tasks(tasks, filter_status=None):
     print(f"Total tasks shown: {count}")
     return count
 
-
-if __name__ == "__main__":
-    print("Avanish Kumar's Operations Module (Part 3) is ready.")
-
