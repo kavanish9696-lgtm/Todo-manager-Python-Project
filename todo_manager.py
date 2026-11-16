@@ -88,3 +88,19 @@ def add_task(tasks, categories):
     priority = get_valid_priority()
     category = get_valid_category(categories)
     due_date = get_valid_date()
+
+    if len(tasks) == 0:
+        new_id = 1
+    else:
+        highest_id = 0
+        for tid in tasks:
+            if tid > highest_id:
+                highest_id = tid
+        new_id = highest_id + 1
+
+    status = STATUS_PENDING
+    task_tuple = (new_id, title, priority, status, category, due_date)
+    tasks[new_id] = task_tuple
+
+    print(f"Success: Task #{new_id} '{title}' due on {due_date} added successfully!")
+    return task_tuple
