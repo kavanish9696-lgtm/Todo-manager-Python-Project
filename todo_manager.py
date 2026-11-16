@@ -284,3 +284,35 @@ def search_tasks(tasks):
     print(f"\nFound {len(matching_tasks)} matching task(s):")
     return show_tasks(matching_tasks, None)
 
+
+def show_tasks(tasks, filter_status=None):
+    """Display tasks in a formatted table sorted by priority (Nested Loops)."""
+    if len(tasks) == 0:
+        print("\nNotice: Task list is empty.")
+        return 0
+
+    # Step 1: Collect all IDs and sort them using sort()
+    id_list = []
+    for tid in tasks:
+        id_list.append(tid)
+    id_list.sort()
+
+    # Step 2: Build list of all tasks ordered by ID
+    all_tasks = []
+    for tid in id_list:
+        all_tasks.append(tasks[tid])
+
+    # Step 3: Filter tasks using slicing copy and remove()
+    if filter_status == STATUS_PENDING:
+        display_list = all_tasks[:]
+        for task in all_tasks:
+            if task[3] == STATUS_DONE:
+                display_list.remove(task)
+    elif filter_status == STATUS_DONE:
+        display_list = all_tasks[:]
+        for task in all_tasks:
+            if task[3] == STATUS_PENDING:
+                display_list.remove(task)
+    else:
+        display_list = all_tasks[:]
+
