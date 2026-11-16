@@ -104,3 +104,26 @@ def add_task(tasks, categories):
 
     print(f"Success: Task #{new_id} '{title}' due on {due_date} added successfully!")
     return task_tuple
+
+
+def mark_done(tasks):
+    """Mark an existing pending task as 'Done'."""
+    print("\n--- Mark Task as Done ---")
+    if len(tasks) == 0:
+        print("Notice: No tasks available.")
+        return False
+
+    task_id = get_valid_id("Enter Task ID to mark as done: ", tasks)
+    task = tasks[task_id]
+
+    if task[3] == STATUS_DONE:
+        print(f"Notice: Task #{task_id} is already marked as Done.")
+        return False
+
+    # Tuples are immutable, so we create a new tuple keeping due date intact
+    updated_task = (task[0], task[1], task[2], STATUS_DONE, task[4], task[5])
+    tasks[task_id] = updated_task
+
+    print(f"Success: Task #{task_id} ('{task[1]}') marked as Done!")
+    return True
+
