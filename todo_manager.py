@@ -316,7 +316,7 @@ def show_tasks(tasks, filter_status=None):
     else:
         display_list = all_tasks[:]
     
-     if len(display_list) == 0:
+    if len(display_list) == 0:
         print(f"\nNotice: No tasks found matching status '{filter_status}'.")
         return 0
 
