@@ -61,3 +61,12 @@ def get_valid_category(categories):
         categories.add(formatted_cat)
         return formatted_cat
         
+def get_valid_date():
+    """Prompt user for a due date in YYYY-MM-DD format, or press Enter to skip."""
+    while True:
+        raw = input("Enter due date (YYYY-MM-DD) or press Enter for 'No Date': ").strip()
+        if raw == "":
+            return "No Date"
+        if is_valid_date(raw):
+            return raw
+        print("Error: Invalid date format! Please enter in YYYY-MM-DD format (e.g. 2026-11-25).")
