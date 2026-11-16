@@ -70,3 +70,21 @@ def get_valid_date():
         if is_valid_date(raw):
             return raw
         print("Error: Invalid date format! Please enter in YYYY-MM-DD format (e.g. 2026-11-25).")
+
+def add_task(tasks, categories):
+    """Add a new task with priority, status, category, and due date."""
+    print("\n--- Add New Task ---")
+    while True:
+        raw_title = input("Enter task title: ")
+        title = clean_title(raw_title)
+        if title == "":
+            if "|" in raw_title:
+                print("Error: Title cannot contain the '|' character.")
+            else:
+                print("Error: Title cannot be empty. Please try again.")
+            continue
+        break
+
+    priority = get_valid_priority()
+    category = get_valid_category(categories)
+    due_date = get_valid_date()
