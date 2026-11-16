@@ -221,3 +221,20 @@ def edit_task(tasks, categories):
     return True
 
 
+def delete_task(tasks):
+    """Delete a task by its ID from the tasks dictionary."""
+    print("\n--- Delete Task ---")
+    if len(tasks) == 0:
+        print("Notice: No tasks available to delete.")
+        return False
+
+    task_id = get_valid_id("Enter Task ID to delete: ", tasks)
+    deleted_task = tasks[task_id]
+    del tasks[task_id]
+
+    print(f"Success: Task #{task_id} ('{deleted_task[1]}') deleted successfully!")
+    return True
+
+
+
+
