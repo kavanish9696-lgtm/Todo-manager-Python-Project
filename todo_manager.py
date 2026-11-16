@@ -236,5 +236,28 @@ def delete_task(tasks):
     return True
 
 
+def clear_completed_tasks(tasks):
+    """Clear all completed tasks from the dictionary at once."""
+    print("\n--- Clear Completed Tasks ---")
+    completed_ids = []
+    for tid in tasks:
+        if tasks[tid][3] == STATUS_DONE:
+            completed_ids.append(tid)
+
+    if len(completed_ids) == 0:
+        print("Notice: There are no completed tasks to clear.")
+        return False
+
+    confirm = input(f"Are you sure you want to delete all {len(completed_ids)} completed task(s)? (y/n): ").strip().lower()
+    if confirm != "y":
+        print("Operation cancelled. No tasks were deleted.")
+        return False
+
+    for tid in completed_ids:
+        del tasks[tid]
+
+    print(f"Success: Cleared {len(completed_ids)} completed task(s)!")
+    return True
+
 
 
