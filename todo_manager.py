@@ -62,6 +62,5 @@ def save_tasks(filename, tasks):
         return -1
 
 
-if __name__ == "__main__":
-    print("Avinash Kumar's Storage Module (Part 2) is ready.")
+
 
