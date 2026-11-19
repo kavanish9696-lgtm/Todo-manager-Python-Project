@@ -61,8 +61,14 @@ def validate_date(date):
     month = parts[1]
     day = parts[2]
 
-    if not year.isdigit() or not month.isdigit() or not day.isdigit():
-        return False
+    if not year.isdigit():
+      return False
+
+    if not month.isdigit():
+       return False
+
+    if not day.isdigit():
+       return False
 
     if len(year) != 4 or len(month) != 2 or len(day) != 2:
         return False
