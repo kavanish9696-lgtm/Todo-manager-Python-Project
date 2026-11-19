@@ -11,7 +11,7 @@ A modular, robust, menu-driven Python Command-Line Interface (CLI) application f
 | :--- | :--- | :--- | :--- |
 | **Part 1** | **Manasvi Saharawat** | Constants, Validation, Math & Recursion | Constants, Tuples, String sanitization (`strip`, `title`), Date validation, Float math, Recursion (`count_pending`), Doctests |
 | **Part 2** | **Aayush Kumar** | File Handling, Persistence & Sets | Context managers (`with open`), File parsing (`\|` delimiter), Error handling (`FileNotFoundError`, `ValueError`), Sets (`categories`) |
-| **Part 3** | **Avanish Kumar ** | CRUD Operations, Search & Table Display | Dictionary CRUD, Tuple immutability, List operations (`sort`, slicing, `remove`), Keyword search, Formatted output, Nested loops |
+| **Part 3** | **Avanish Kumar** | CRUD Operations, Search & Table Display | Dictionary CRUD, Tuple immutability, List operations (`sort`, slicing, `remove`), Keyword search, Formatted output, Nested loops |
 | **Part 4** | **Prashant** | Menu Controller & System Integration | Interactive event loop (`while True`), Menu logic (`if-elif-else`), System coordination, Auto-persistence, Graceful exit |
 
 ---
@@ -25,7 +25,6 @@ Todo-manager-Python-Project
 ├── part2_aayush.py       # Part 2: File reading/writing and category set management
 ├── part3_avanish.py      # Part 3: Task CRUD operations, search, and priority table display
 ├── part4_prashant.py     # Part 4: Interactive menu controller and integration
-├── tasks.txt             # Persistent storage file for all task records
 └── README.md             # Project documentation and user manual
 ```
 
