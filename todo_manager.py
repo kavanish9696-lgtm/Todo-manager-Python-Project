@@ -1,10 +1,212 @@
+
+
+# PART 1: CONSTANTS, VALIDATION, MATH & RECURSION
+# Student Name: Manasvi Saharawat
+# Group: 12
+# File: part1_manasvi.py
+
+
+# 1. GLOBAL CONSTANTS
+
+PRIORITIES = ("High", "Medium", "Low")
+
+STATUSES = ("Pending", "Done")
+
+
+# 2. VALIDATE TASK TITLE
+
+def validate_title(title):
+
+    title = title.strip()
+
+    if title == "" or "|" in title:
+        return None
+
+    return title
+
+
+# 3. VALIDATE CATEGORY
+
+def validate_category(category):
+
+    category = category.strip().title()
+
+    if category == "" or "|" in category:
+        return None
+
+    return category
+
+
+# 4. VALIDATE PRIORITY
+
+def validate_priority(priority):
+
+    priority = priority.strip().title()
+
+    if priority in PRIORITIES:
+        return priority
+
+    else:
+        return None
+
+
+# 5. VALIDATE DATE
+
+def validate_date(date):
+
+    parts = date.split("-")
+
+    if len(parts) != 3:
+        return False
+
+    year, month, day = parts
+
+    if not (year.isdigit() and month.isdigit() and day.isdigit()):
+        return False
+
+    if len(year) != 4 or len(month) != 2 or len(day) != 2:
+        return False
+
+    year = int(year)
+    month = int(month)
+    day = int(day)
+
+    if year < 1 or month < 1 or month > 12:
+        return False
+
+    # Check leap year
+
+    if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
+        leap_year = True
+    else:
+        leap_year = False
+
+    # Number of days in each month
+
+    days = [31, 28, 31, 30, 31, 30,
+            31, 31, 30, 31, 30, 31]
+
+    if leap_year:
+        days[1] = 29
+
+    if day < 1 or day > days[month - 1]:
+        return False
+
+    return True
+
+
+# 6. COUNT PENDING TASKS USING RECURSION
+
+def count_pending(tasks):
+
+    # Base case
+
+    if len(tasks) == 0:
+        return 0
+
+    # Check first task
+
+    if tasks[0][3] == "Pending":
+        count = 1
+    else:
+        count = 0
+
+    # Recursive call
+
+    return count + count_pending(tasks[1:])
+
+
+# 7. CALCULATE COMPLETION PERCENTAGE
+
+def calculate_percent_done(tasks):
+
+    total_tasks = len(tasks)
+
+    if total_tasks == 0:
+        return 0.0
+
+    pending = count_pending(tasks)
+
+    completed = total_tasks - pending
+
+    percentage = (completed / total_tasks) * 100
+
+    return round(percentage, 1)
+
+
+# END OF PART 
+
+
+def load_tasks(filename, categories):
+    """Load tasks from text file into a dictionary; add loaded categories to set."""
+    tasks = {}
+    try:
+        with open(filename, "r") as file:
+            for line in file:
+                cleaned_line = line.strip()
+                if cleaned_line == "":
+                    continue
+
+                parts = cleaned_line.split("|")
+                # Supports both 5-field (legacy) and 6-field (with due date) files
+                if len(parts) < 5 or len(parts) > 6:
+                    print(f"Warning: Skipping malformed line -> {cleaned_line}")
+                    continue
+
+                try:
+                    task_id = int(parts[0])
+                except ValueError:
+                    print(f"Warning: Non-integer ID in line -> {cleaned_line}")
+                    continue
+
+                title = parts[1].strip()
+                priority = parts[2].strip()
+                status = parts[3].strip()
+                category = parts[4].strip()
+
+                if len(parts) == 6:
+                    due_date = parts[5].strip()
+                else:
+                    due_date = "No Date"
+
+                if priority not in PRIORITIES or status not in STATUSES:
+                    print(f"Warning: Invalid priority/status in line -> {cleaned_line}")
+                    continue
+
+                # Store task as 6-element tuple in dictionary
+                tasks[task_id] = (task_id, title, priority, status, category, due_date)
+                # Add category to unique set
+                categories.add(category)
+
+        print(f"Loaded {len(tasks)} task(s) from '{filename}'.")
+    except FileNotFoundError:
+        print(f"Notice: '{filename}' not found. Starting with an empty task list.")
+
+    return tasks
+
+
+def save_tasks(filename, tasks):
+    """Save all tasks from dictionary to text file using '|' delimiter."""
+    try:
+        with open(filename, "w") as file:
+            for task_id in sorted(tasks.keys()):
+                task = tasks[task_id]
+                # Convert tuple items to string and join with '|'
+                record = [str(task[0]), task[1], task[2], task[3], task[4], task[5]]
+                line = "|".join(record)
+                file.write(line + "\n")
+        return len(tasks)
+    except IOError as e:
+        print(f"Error saving to file: {e}")
+        return -1
+
+      
+      
 """
-================================================================================
 PART 3: TASK CRUD OPERATIONS, SEARCH & NESTED LOOPS TABLE
 Student Name: Avanish Kumar (Group 12)
 """
 """
-================================================================================
 Topics Covered:
   - Input validation & crash prevention (get_valid_id, get_valid_priority, get_valid_category, get_valid_date)
   - Dictionary operations (insert, update, delete with `del`, lookup)
@@ -13,7 +215,6 @@ Topics Covered:
   - Nested Loops (outer loop over PRIORITIES, inner loop over display_list)
   - Formatted output (f-string table column alignments)
   - String search & membership operators (keyword in title.lower())
-================================================================================
 """
 def get_valid_id(prompt_msg,tasks):
     """prompt user for a valid task ID that exist in the task dictionary."""
@@ -339,4 +540,3 @@ def show_tasks(tasks, filter_status=None):
     print("=" * 78)
     print(f"Total tasks shown: {count}")
     return count
-
