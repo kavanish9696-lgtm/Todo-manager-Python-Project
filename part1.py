@@ -126,6 +126,3 @@ def calculate_percent_done(tasks):
     percentage = (completed / total) * 100
 
     return round(percentage, 1)
-#---------------------------------------------------------------------
-#End of the program
-#---------------------------------------------------------------------
