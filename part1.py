@@ -1,66 +1,67 @@
 
-# PART 1: CONSTANTS, VALIDATION, MATH & RECURSION
-# Student Name: Manasvi Saharawat
-# Group: 12
-# File: part1_manasvi.py
+# PART 1: CONSTANTS, VALIDATION, MATH AND RECURSION
 
-
-# 1. GLOBAL CONSTANTS
+# 1. Global Constants
 
 PRIORITIES = ("High", "Medium", "Low")
-
 STATUSES = ("Pending", "Done")
 
 
-# 2. VALIDATE TASK TITLE
+# 2. Validate Task Title
 
 def validate_title(title):
-
     title = title.strip()
 
-    if title == "" or "|" in title:
+    if title == "":
+        return None
+
+    if "|" in title:
         return None
 
     return title
 
 
-# 3. VALIDATE CATEGORY
+# 3. Validate Category
 
 def validate_category(category):
-
     category = category.strip().title()
 
-    if category == "" or "|" in category:
+    if category == "":
+        return None
+
+    if "|" in category:
         return None
 
     return category
 
 
-# 4. VALIDATE PRIORITY
+# 4. Validate Priority
 
 def validate_priority(priority):
-
     priority = priority.strip().title()
 
     if priority in PRIORITIES:
         return priority
-
     else:
         return None
 
 
-# 5. VALIDATE DATE
+# 5. Validate Date
 
 def validate_date(date):
+
+    date = date.strip()
 
     parts = date.split("-")
 
     if len(parts) != 3:
         return False
 
-    year, month, day = parts
+    year = parts[0]
+    month = parts[1]
+    day = parts[2]
 
-    if not (year.isdigit() and month.isdigit() and day.isdigit()):
+    if not year.isdigit() or not month.isdigit() or not day.isdigit():
         return False
 
     if len(year) != 4 or len(month) != 2 or len(day) != 2:
@@ -74,19 +75,13 @@ def validate_date(date):
         return False
 
     # Check leap year
-
     if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
         leap_year = True
     else:
         leap_year = False
 
-    # Number of days in each month
-
-    days = [31, 28, 31, 30, 31, 30,
+    days = [31, 29 if leap_year else 28, 31, 30, 31, 30,
             31, 31, 30, 31, 30, 31]
-
-    if leap_year:
-        days[1] = 29
 
     if day < 1 or day > days[month - 1]:
         return False
@@ -94,43 +89,34 @@ def validate_date(date):
     return True
 
 
-# 6. COUNT PENDING TASKS USING RECURSION
+# 6. Count Pending Tasks Using Recursion
 
 def count_pending(tasks):
 
-    # Base case
-
-    if len(tasks) == 0:
+    if tasks == []:
         return 0
 
-    # Check first task
+    count = 0
 
     if tasks[0][3] == "Pending":
         count = 1
-    else:
-        count = 0
-
-    # Recursive call
 
     return count + count_pending(tasks[1:])
 
 
-# 7. CALCULATE COMPLETION PERCENTAGE
+# 7. Calculate Percentage of Completed Tasks
 
 def calculate_percent_done(tasks):
 
-    total_tasks = len(tasks)
+    total = len(tasks)
 
-    if total_tasks == 0:
-        return 0.0
+    if total == 0:
+        return 0
 
     pending = count_pending(tasks)
 
-    completed = total_tasks - pending
+    completed = total - pending
 
-    percentage = (completed / total_tasks) * 100
+    percentage = (completed / total) * 100
 
     return round(percentage, 1)
-
-
-# END OF PART 1
