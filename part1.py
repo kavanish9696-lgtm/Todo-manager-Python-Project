@@ -2,6 +2,8 @@
 # PART 1: CONSTANTS, VALIDATION, MATH AND RECURSION
 # ============================================================
 # 1. GLOBAL CONSTANTS
+PRIORITIES = ("High", "Medium", "Low")
+STATUSES = ("Pending", "Done")
 FILE_NAME = "tasks.txt"
 PRIORITIES = ("High", "Medium", "Low") # Fixed tuple defining priority hierarchy
 STATUS_PENDING = "Pending" 
