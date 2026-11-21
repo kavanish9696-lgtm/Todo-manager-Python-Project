@@ -4,6 +4,12 @@
 # 1. GLOBAL CONSTANTS
 PRIORITIES = ("High", "Medium", "Low")
 STATUSES = ("Pending", "Done")
+FILE_NAME = "tasks.txt"
+PRIORITIES = ("High", "Medium", "Low") # Fixed tuple defining priority hierarchy
+STATUS_PENDING = "Pending" 
+STATUS_DONE = "Done"
+STATUSES = (STATUS_PENDING, STATUS_DONE)
+DEFAULT_CATEGORIES = {"Study", "Personal", "Work", "Health"} # Initial category set
 
 
 # 2. VALIDATE TASK TITLE (asks again until valid)
