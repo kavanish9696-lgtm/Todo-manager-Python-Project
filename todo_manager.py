@@ -1,243 +1,50 @@
-# ============================================================
-# PART 1: CONSTANTS, VALIDATION, MATH AND RECURSION
-# ============================================================
-# 1. GLOBAL CONSTANTS
-PRIORITIES = ("High", "Medium", "Low")
-STATUSES = ("Pending", "Done")
-FILE_NAME = "tasks.txt"
-PRIORITIES = ("High", "Medium", "Low") # Fixed tuple defining priority hierarchy
-STATUS_PENDING = "Pending" 
-STATUS_DONE = "Done"
-STATUSES = (STATUS_PENDING, STATUS_DONE)
-DEFAULT_CATEGORIES = {"Study", "Personal", "Work", "Health"} # Initial category set
-
-
-# 2. VALIDATE TASK TITLE (asks again until valid)
-def validate_title():
-    while True:
-        title = input("Enter task title: ").strip()
-        if title == "":
-            print("Title cannot be empty. Please try again.")
-            continue
-        if "|" in title:
-            print("Invalid character '|' in title. Please try again.")
-            continue
-        print("Valid title:", title)
-        return title
-
-
-# 3. VALIDATE CATEGORY (asks again until valid)
-def validate_category():
-    while True:
-        category = input("Enter task category: ").strip().title()
-        if category == "":
-            print("Category cannot be empty. Please try again.")
-            continue
-        if "|" in category:
-            print("Invalid character '|' in category. Please try again.")
-            continue
-        print("Valid category:", category)
-        return category
-
-
-# 4. VALIDATE PRIORITY (asks again until valid)
-def validate_priority():
-    while True:
-        priority = input("Enter priority (High/Medium/Low): ").strip().title()
-        if priority in PRIORITIES:
-            print("Valid priority:", priority)
-            return priority
-        print("Invalid priority. Enter High, Medium or Low.")
-
-
-# 5. VALIDATE DATE (asks again until valid)
-def validate_date():
-    while True:
-        date = input("Enter date (YYYY-MM-DD): ").strip()
-        parts = date.split("-")
-        if len(parts) != 3:
-            print("Invalid date format. Use YYYY-MM-DD.")
-            continue
-        year, month, day = parts
-        if not year.isdigit():
-            print("Invalid year.")
-            continue
-        if not month.isdigit():
-            print("Invalid month.")
-            continue
-        if not day.isdigit():
-            print("Invalid day.")
-            continue
-        if len(year) != 4 or len(month) != 2 or len(day) != 2:
-            print("Use YYYY-MM-DD format.")
-            continue
-        year = int(year)
-        month = int(month)
-        day = int(day)
-        if year < 1 or month < 1 or month > 12:
-            print("Invalid date.")
-            continue
-
-        # CHECK LEAP YEAR
-        if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
-            leap_year = True
-        else:
-            leap_year = False
-        days = [31, 29 if leap_year else 28, 31, 30, 31, 30,
-                31, 31, 30, 31, 30, 31]
-        if day < 1 or day > days[month - 1]:
-            print("Invalid day for this month.")
-            continue
-        print("Valid date:", date)
-        return date
-
-
-# 6. COUNT PENDING TASKS USING RECURSION
-def count_pending():
-    # keep asking until a valid non-negative whole number is entered
-    while True:
-        text = input("\nHow many tasks do you want to enter? ").strip()
-        if text.isdigit():
-            total = int(text)
-            break
-        print("Please enter a valid whole number.")
-
-    tasks = []
-    for i in range(total):
-        print("\nTask", i + 1)
-        status = input("Enter status (Pending/Done): ").strip().title()
-        while status not in STATUSES:
-            print("Invalid status. Enter Pending or Done.")
-            status = input("Enter status: ").strip().title()
-        tasks.append(status)
-
-    def count_recursive(tasks):
-        if tasks == []:
-            return 0
-        count = 0
-        if tasks[0] == "Pending":
-            count = 1
-        return count + count_recursive(tasks[1:])
-
-    pending = count_recursive(tasks)
-    print("\nTotal pending tasks:", pending)
-    return pending, total
-
-
-# 7. CALCULATE PERCENTAGE OF COMPLETED TASKS
-def calculate_percent_done(pending, total):
-    if total == 0:
-        print("No tasks available.")
-        return 0
-    completed = total - pending
-    percentage = (completed / total) * 100
-    percentage = round(percentage, 1)
-    print("Completed tasks:", completed)
-    print("Completion percentage:", percentage, "%")
-    return percentage
-
-
-# ============================================================
-# MAIN PROGRAM
-# ============================================================
-
-print("===================================")
-print("       TO-DO LIST MANAGER")
-print("===================================")
-
-print("\n--- TASK DETAILS ---")
-
-title = validate_title()
-category = validate_category()
-priority = validate_priority()
-date = validate_date()
-
-print("\n--- TASK DETAILS SUMMARY ---")
-
-print("Title:", title)
-print("Category:", category)
-print("Priority:", priority)
-print("Date:", date)
-
-print("\n--- TASK STATISTICS ---")
-
-pending, total = count_pending()
-
-calculate_percent_done(pending, total)
-
-"""
-PART 2: FILE HANDLING, STORAGE & SETS
-Student Name: Aayush Kumar (Group 12)
-File: part2_aayush.py
-"""
-
-
-def load_tasks(filename, categories):
-    """Load tasks from file into a dictionary; add categories to the set."""
-    tasks = {}
-
-    # append mode me file na ho to ban jati hai, isliye aage read me error nahi aata
-    file = open(filename, "a")
-    file.close()
-
-    file = open(filename, "r")
-    for line in file:
-        cleaned_line = line.strip()
-        if cleaned_line == "":
-            continue
-
-        parts = cleaned_line.split("|")
-        # 5 fields (old file) or 6 fields (with due date)
-        if len(parts) < 5 or len(parts) > 6:
-            print(f"Warning: Skipping malformed line -> {cleaned_line}")
-            continue
-
-        if not parts[0].strip().isdigit():
-            print(f"Warning: Non-integer ID in line -> {cleaned_line}")
-            continue
-
-        task_id = int(parts[0])
-        title = parts[1].strip()
-        priority = parts[2].strip()
-        status = parts[3].strip()
-        category = parts[4].strip()
-        due_date = "No Date"
-        if len(parts) == 6:
-            due_date = parts[5].strip()
-
-        if priority not in PRIORITIES or status not in STATUSES:
-            print(f"Warning: Invalid priority/status in line -> {cleaned_line}")
-            continue
-
-        tasks[task_id] = (task_id, title, priority, status, category, due_date)
-        categories.add(category)
-    file.close()
-
-    print(f"Loaded {len(tasks)} task(s) from '{filename}'.")
-    return tasks
-
-
-def save_tasks(filename, tasks):
-    """Save all tasks to file, one task per line, joined with '|'."""
-    id_list = []
-    for task_id in tasks:
-        id_list.append(task_id)
-    id_list.sort()
-
-    file = open(filename, "w")
-    for task_id in id_list:
-        task = tasks[task_id]
-        file.write("|".join([str(task[0]), task[1], task[2], task[3], task[4], task[5]]) + "\n")
-    file.close()
-    return len(tasks)
-  
-  
-  
 """
 PART 3: TASK OPERATIONS, SEARCH & NESTED LOOPS TABLE
-Student Name: Avanish Kar (Group 12)
+Student Name: Avanish Kumar (Group 12)
 File: part3_avanish.py
 """
+
+def clean_title(raw_title):
+    """Remove extra spaces and reject empty titles or the file separator."""
+    title = raw_title.strip()
+    if title == "" or "|" in title:
+        return ""
+    return title
+
+
+def is_valid_priority(raw_priority):
+    """Return the correctly formatted priority, or an empty string."""
+    priority = raw_priority.strip().title()
+    if priority in PRIORITIES:
+        return priority
+    return ""
+
+
+def is_valid_date(raw_date):
+    """Check YYYY-MM-DD using the same date and leap-year logic as Part 1."""
+    parts = raw_date.split("-")
+    if len(parts) != 3:
+        return False
+    year, month, day = parts
+    if not year.isdigit() or not month.isdigit() or not day.isdigit():
+        return False
+    if len(year) != 4 or len(month) != 2 or len(day) != 2:
+        return False
+    year = int(year)
+    month = int(month)
+    day = int(day)
+    if year < 1 or month < 1 or month > 12:
+        return False
+    if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
+        leap_year = True
+    else:
+        leap_year = False
+    days = [31, 29 if leap_year else 28, 31, 30, 31, 30,
+            31, 31, 30, 31, 30, 31]
+    if day < 1 or day > days[month - 1]:
+        return False
+    return True
+
 
 def get_valid_id(prompt_msg, tasks):
     """Ask for a task ID until an existing one is entered."""
@@ -332,6 +139,8 @@ def mark_done(tasks):
         print("Notice: No tasks available.")
         return False
 
+    print("\nHere are your tasks and their IDs:")
+    show_tasks(tasks, None)
     task_id = get_valid_id("Enter Task ID to mark as done: ", tasks)
     task = tasks[task_id]
     if task[3] == STATUS_DONE:
@@ -351,6 +160,8 @@ def edit_task(tasks, categories):
         print("Notice: No tasks available to edit.")
         return False
 
+    print("\nHere are your tasks and their IDs:")
+    show_tasks(tasks, None)
     task_id = get_valid_id("Enter Task ID to edit: ", tasks)
     task = tasks[task_id]
     print(f"Current task: Title='{task[1]}', Priority='{task[2]}', Status='{task[3]}', Category='{task[4]}', Due Date='{task[5]}'")
@@ -405,10 +216,13 @@ def edit_task(tasks, categories):
 def delete_task(tasks):
     """Delete a task by ID."""
     print("\n--- Delete Task ---")
+    print("Note: You can delete only one task at a time.")
     if len(tasks) == 0:
         print("Notice: No tasks available to delete.")
         return False
 
+    print("\nHere are your tasks and their IDs:")
+    show_tasks(tasks, None)
     task_id = get_valid_id("Enter Task ID to delete: ", tasks)
     deleted_task = tasks[task_id]
     del tasks[task_id]
@@ -501,3 +315,4 @@ def show_tasks(tasks, filter_status=None):
     print("=" * 78)
     print(f"Total tasks shown: {count}")
     return count
+
